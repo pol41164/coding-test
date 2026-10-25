@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 import { LeadModel } from "@/models/Lead";
 
@@ -18,6 +19,9 @@ function parsePositiveInt(value: string | null, fallback: number): number | null
 }
 
 export async function GET(request: Request) {
+  // 每次請求都要即時驗證登入，不能在 build 時預先產生（Cache Components 會嘗試預先產生 GET）
+  await connection();
+
   // 一定先在後端驗證登入，沒有合法憑證就不碰任何名單資料
   let admin;
   try {

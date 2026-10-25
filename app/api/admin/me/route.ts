@@ -1,7 +1,11 @@
+import { connection } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 
 // 查目前是否已登入
 export async function GET() {
+  // 每次請求都要即時驗證登入，不能在 build 時預先產生（Cache Components 會嘗試預先產生 GET）
+  await connection();
+
   try {
     const admin = await requireAdmin();
     if (!admin) {
