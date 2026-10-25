@@ -8,8 +8,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-noto-tc), "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --font-display: var(--font-fredoka), var(--font-noto-tc), "PingFang TC", "Microsoft JhengHei", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,5 +22,189 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+/* ───────────── 測驗頁 ───────────── */
+
+.quiz-bg {
+  background-color: #120820;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgb(168 85 247 / 0.35), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 0% 0%, rgb(236 72 153 / 0.18), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 100% 100%, rgb(99 102 241 / 0.16), transparent 70%);
+  color: #f5f3ff;
+}
+
+/* 主要按鈕：紫色漸層 + 光暈 */
+.btn-primary {
+  background-image: linear-gradient(135deg, #a855f7 0%, #7c3aed 55%, #6d28d9 100%);
+  box-shadow:
+    0 10px 30px -8px rgb(168 85 247 / 0.65),
+    inset 0 1px 0 rgb(255 255 255 / 0.2);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow:
+    0 16px 40px -8px rgb(168 85 247 / 0.8),
+    inset 0 1px 0 rgb(255 255 255 / 0.25);
+}
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+/* 頭像光球 */
+.orb {
+  background:
+    radial-gradient(circle at 32% 28%, rgb(255 255 255 / 0.55), transparent 32%),
+    linear-gradient(160deg, #f472b6 0%, #c026d3 45%, #6366f1 80%, #38bdf8 100%);
+  box-shadow:
+    inset -6px -10px 20px rgb(30 0 60 / 0.35),
+    0 0 40px rgb(217 70 239 / 0.55);
+}
+.orb-ring {
+  background: radial-gradient(circle, rgb(168 85 247 / 0.28), rgb(88 28 135 / 0.12) 60%, transparent 72%);
+  box-shadow: inset 0 0 0 1px rgb(192 132 252 / 0.25);
+}
+
+.text-gradient {
+  background-image: linear-gradient(120deg, #f0abfc 0%, #c084fc 45%, #818cf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* 轉場：淡入 + 微微往上滑 */
+@keyframes quiz-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-enter {
+  animation: quiz-enter 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+}
+.animate-pulse-glow {
+  animation: pulse-glow 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-enter,
+  .animate-float,
+  .animate-pulse-glow {
+    animation: none;
+  }
+  .btn-primary,
+  .btn-primary:hover:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* ───────────── 後台：簡潔、看得清楚資料就好 ───────────── */
+
+@layer base {
+  .admin {
+    width: 100%;
+    max-width: 56rem;
+    margin: 0 auto;
+    padding: 2rem 1.25rem;
+  }
+  .admin h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .admin h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+  .admin p {
+    margin-bottom: 0.75rem;
+  }
+  .admin label {
+    display: block;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+  .admin input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid color-mix(in srgb, var(--foreground) 30%, transparent);
+    border-radius: 6px;
+    background: transparent;
+  }
+  .admin input:focus {
+    outline: none;
+    border-color: var(--foreground);
+  }
+  .admin button {
+    padding: 0.4rem 0.9rem;
+    border: 1px solid color-mix(in srgb, var(--foreground) 30%, transparent);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+  .admin button:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--foreground) 10%, transparent);
+  }
+  .admin button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .admin table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+  .admin th,
+  .admin td {
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
+    white-space: nowrap;
+  }
+  .admin th {
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: color-mix(in srgb, var(--foreground) 60%, transparent);
+  }
+  .admin tbody tr:hover {
+    background: color-mix(in srgb, var(--foreground) 4%, transparent);
+  }
 }
